@@ -737,6 +737,17 @@
             return this;
         },
 
+        /**@
+        * #.getVersion
+        * @comp Crafty Core
+        * @sign public this .getVersion()
+        * @returns Actualy crafty version
+        *
+        * @example
+        * ~~~
+        * Crafty.getVersion(); //'0.4.8'
+        * ~~~
+        */
         getVersion: function () {
             return '0.4.8';
         },
@@ -936,7 +947,7 @@
             if (arguments.length > 0) {
                 craft.addComponent.apply(craft, arguments);
             }
-            craft.setName('Entity #'+id);
+            craft.setName('Entity #'+id); //set default entity human readable name
             craft.addComponent("obj"); //every entity automatically assumes obj
 
             Crafty.trigger("NewEntity", { id: id });
@@ -2274,7 +2285,7 @@ Crafty.c("Gravity", {
 	gravity: function (comp) {
 		if (comp) this._anti = comp;
 
-		this.bind("EnterFrame", this._enterframe);
+		this.bind("EnterFrame", this._enterFrame);
 
 		return this;
 	},
@@ -2301,12 +2312,10 @@ Crafty.c("Gravity", {
 		return this;
 	},
 
-	_enterframe: function () {
+	_enterFrame: function () {
 		if (this._falling) {
 			//if falling, move the players Y
-			//it used to be this._gy += this._gravityConst * 2;
-			//2 seems to be unnecessary. So 2 is removed. by pengyu
-			this._gy += this._gravityConst;
+			this._gy += this._gravityConst * 2;
 			this.y += this._gy;
 		} else {
 			this._gy = 0; //reset change in y
@@ -2359,7 +2368,7 @@ Crafty.c("Gravity", {
 	* Disable gravity for this component. It can be reenabled by calling .gravity()
 	*/
 	antigravity: function () {
-		this.unbind("EnterFrame", this._enterframe);
+		this.unbind("EnterFrame", this._enterFrame);
 	}
 });
 
@@ -3258,8 +3267,8 @@ Crafty.extend({
 		*/
 		inner: function (obj) {
 			var rect = obj.getBoundingClientRect(),
-				x = rect.left + (window.pageXOffset ? window.pageXOffset : document.body.scrollTop),
-				y = rect.top + (window.pageYOffset ? window.pageYOffset : document.body.scrollLeft),
+				x = rect.left + (window.pageXOffset ? window.pageXOffset : document.body.scrollLeft),
+				y = rect.top + (window.pageYOffset ? window.pageYOffset : document.body.scrollTop),
 
 			//border left
 				borderX = parseInt(this.getStyle(obj, 'border-left-width') || 0, 10) || parseInt(this.getStyle(obj, 'borderLeftWidth') || 0, 10) || 0,
@@ -4176,11 +4185,11 @@ Crafty.extend({
 		paddingX = parseInt(paddingX || 0, 10); //just incase
 		paddingY = parseInt(paddingY || 0, 10);
 
-		img = Crafty.assets[url];
+		img = Crafty.asset(url);
 		if (!img) {
 			img = new Image();
 			img.src = url;
-			Crafty.assets[url] = img;
+			Crafty.asset(url, img);
 			img.onload = function () {
 				//all components with this img are now ready
 				for (spriteName in map) {
@@ -4262,7 +4271,13 @@ Crafty.extend({
 		}
 
 		//save anonymous function to be able to remove
-		var afn = function (e) { var e = e || window.event; callback.call(ctx, e) },
+		var afn = function (e) { 
+				var e = e || window.event; 
+
+				if (typeof callback === 'function') {
+					callback.call(ctx, e);
+				}
+			},
 			id = ctx[0] || "";
 
 		if (!this._events[id + obj + type + callback]) this._events[id + obj + type + callback] = afn;
@@ -4765,30 +4780,7 @@ Crafty.extend({
 				Crafty.stage.fullscreen = true;
 			}
 
-			Crafty.addEvent(this, window, "resize", function () {
-				Crafty.DOM.window.init();
-				var w = Crafty.DOM.window.width,
-					h = Crafty.DOM.window.height,
-					offset;
-
-
-				if (Crafty.stage.fullscreen) {
-					this.width = w;
-					this.height = h;
-					Crafty.stage.elem.style.width = w + "px";
-					Crafty.stage.elem.style.height = h + "px";
-
-					if (Crafty.canvas._canvas) {
-						Crafty.canvas._canvas.width = w;
-						Crafty.canvas._canvas.height = h;
-						Crafty.DrawManager.drawAll();
-					}
-				}
-
-				offset = Crafty.DOM.inner(Crafty.stage.elem);
-				Crafty.stage.x = offset.x;
-				Crafty.stage.y = offset.y;
-			});
+			Crafty.addEvent(this, window, "resize", Crafty.viewport.reload);
 
 			Crafty.addEvent(this, window, "blur", function () {
 				if (Crafty.settings.get("autoPause")) {
@@ -4885,6 +4877,39 @@ Crafty.extend({
 				this.y = this._y;
 				Crafty.e("viewport");
 			}
+		},
+
+		/**@
+		 * #Crafty.viewport.reload
+		 * @comp Crafty.stage
+		 * 
+		 * Recalculate and reload stage width, height and position.
+		 * Useful when browser return wrong results on init (like safari on Ipad2).
+		 * 
+		 */
+		reload : function () {
+			Crafty.DOM.window.init();
+			var w = Crafty.DOM.window.width,
+				h = Crafty.DOM.window.height,
+				offset;
+
+
+			if (Crafty.stage.fullscreen) {
+				this.width = w;
+				this.height = h;
+				Crafty.stage.elem.style.width = w + "px";
+				Crafty.stage.elem.style.height = h + "px";
+
+				if (Crafty.canvas._canvas) {
+					Crafty.canvas._canvas.width = w;
+					Crafty.canvas._canvas.height = h;
+					Crafty.DrawManager.drawAll();
+				}
+			}
+
+			offset = Crafty.DOM.inner(Crafty.stage.elem);
+			Crafty.stage.x = offset.x;
+			Crafty.stage.y = offset.y;
 		}
 	},
 
@@ -5706,38 +5731,43 @@ Crafty.extend({
 	},
 
 
-	/**@
-	* #Crafty.touchDispatch
-	* @category Input
-	* 
-	* TouchEvents have a different structure then MouseEvents.
-	* The relevant data lives in e.changedTouches[0].
-	* To normalize TouchEvents we catch em and dispatch a mock MouseEvent instead.
-	* 
-	* @see Crafty.mouseDispatch
-	*/
+    /**@
+    * #Crafty.touchDispatch
+    * @category Input
+    * 
+    * TouchEvents have a different structure then MouseEvents.
+    * The relevant data lives in e.changedTouches[0].
+    * To normalize TouchEvents we catch em and dispatch a mock MouseEvent instead.
+    * 
+    * @see Crafty.mouseDispatch
+    */
 
-	touchDispatch: function(e) {
+    touchDispatch: function(e) {
+        var type;
 
-		var type;
-		if (e.type === "touchstart") type = "mousedown";
-		else if (e.type === "touchmove") type = "mousemove";
-		else if (e.type === "touchend") type = "mouseup";
+        if (e.type === "touchstart") type = "mousedown";
+        else if (e.type === "touchmove") type = "mousemove";
+        else if (e.type === "touchend") type = "mouseup";
+        else if (e.type === "touchcancel") type = "mouseup";
+        else if (e.type === "touchleave") type = "mouseup";
+        
+        if(e.touches && e.touches.length) {
+            first = e.touches[0];
+        } else if(e.changedTouches && e.changedTouches.length) {
+            first = e.changedTouches[0];
+        }
 
-		var touch = e.changedTouches[0];
+        var simulatedEvent = document.createEvent("MouseEvent");
+        simulatedEvent.initMouseEvent(type, true, true, window, 1,
+            first.screenX, 
+            first.screenY,
+            first.clientX, 
+            first.clientY, 
+            false, false, false, false, 0, e.relatedTarget
+        );
 
-		var mockup = document.createEvent("MouseEvents");
-		mockup.initMouseEvent(type, true, true, window, 0,
-			touch.screenX,
-			touch.screenY,
-			touch.clientX,
-			touch.clientY,
-			false, false, false, false, 0, e.target
-		);
-		mockup.target = e.target;
-
-		e.target.dispatchEvent(mockup);
-	},
+        first.target.dispatchEvent(simulatedEvent);
+    },
 
 
 	/**@
@@ -5818,6 +5848,8 @@ Crafty.bind("Load", function () {
 	Crafty.addEvent(this, Crafty.stage.elem, "touchstart", Crafty.touchDispatch);
 	Crafty.addEvent(this, Crafty.stage.elem, "touchmove", Crafty.touchDispatch);
 	Crafty.addEvent(this, Crafty.stage.elem, "touchend", Crafty.touchDispatch);
+    Crafty.addEvent(this, Crafty.stage.elem, "touchcancel", Crafty.touchDispatch);
+    Crafty.addEvent(this, Crafty.stage.elem, "touchleave", Crafty.touchDispatch);
 });
 
 /**@
@@ -5921,19 +5953,24 @@ Crafty.c("Draggable", {
 	init: function () {
 		this.requires("Mouse");
 		this._ondrag = function (e) {
-			var pos = Crafty.DOM.translate(e.clientX, e.clientY);
-      if(this._dir) {
-        var len = (pos.x - this._origMouseDOMPos.x) * this._dir.x
-        + (pos.y - this._origMouseDOMPos.y) * this._dir.y;
-        this.x = this._oldX + len * this._dir.x;
-        this.y = this._oldY + len * this._dir.y;
-      } else {
-        this.x = this._oldX + (pos.x - this._origMouseDOMPos.x);
-        this.y = this._oldY + (pos.y - this._origMouseDOMPos.y);
-      }
+            var pos = Crafty.DOM.translate(e.clientX, e.clientY);
 
-			this.trigger("Dragging", e);
-		};
+            // ignore invalid 0 0 position - strange problem on ipad
+            if (pos.x == 0 || pos.y == 0) {
+                return false;
+            }
+
+            if(this._dir) {
+                var len = (pos.x - this._origMouseDOMPos.x) * this._dir.x + (pos.y - this._origMouseDOMPos.y) * this._dir.y;
+                this.x = this._oldX + len * this._dir.x;
+                this.y = this._oldY + len * this._dir.y;
+            } else {
+                this.x = this._oldX + (pos.x - this._origMouseDOMPos.x);
+                this.y = this._oldY + (pos.y - this._origMouseDOMPos.y);
+            }
+
+            this.trigger("Dragging", e);
+        };
 
 		this._ondown = function (e) {
 			if (e.mouseButton !== Crafty.mouseButtons.LEFT) return;
@@ -5949,12 +5986,14 @@ Crafty.c("Draggable", {
 			this.trigger("StartDrag", e);
 		};
 
-		this._onup = function upper(e) {
-			Crafty.removeEvent(this, Crafty.stage.elem, "mousemove", this._ondrag);
-			Crafty.removeEvent(this, Crafty.stage.elem, "mouseup", this._onup);
-			this._dragging = false;
-			this.trigger("StopDrag", e);
-		};
+        this._onup = function upper(e) {
+            if (this._dragging == true) {
+                Crafty.removeEvent(this, Crafty.stage.elem, "mousemove", this._ondrag);
+                Crafty.removeEvent(this, Crafty.stage.elem, "mouseup", this._onup);
+                this._dragging = false;
+                this.trigger("StopDrag", e);
+            }
+        };
 
 		this.enableDrag();
 	},
@@ -6279,7 +6318,9 @@ Crafty.c("Fourway", {
 			W: -90,
 			S: 90,
 			D: 0,
-			A: 180
+			A: 180,
+			Z: -90,
+			Q: 180
 		});
 
 		return this;
@@ -6327,7 +6368,8 @@ Crafty.c("Twoway", {
 			RIGHT_ARROW: 0,
 			LEFT_ARROW: 180,
 			D: 0,
-			A: 180
+			A: 180,
+			Q: 180
 		});
 
 		if (speed) this._speed = speed;
@@ -6340,7 +6382,7 @@ Crafty.c("Twoway", {
 				this._falling = true;
 			}
 		}).bind("KeyDown", function () {
-			if (this.isDown("UP_ARROW") || this.isDown("W")) this._up = true;
+			if (this.isDown("UP_ARROW") || this.isDown("W") || this.isDown("Z")) this._up = true;
 		});
 
 		return this;
@@ -6600,16 +6642,19 @@ Crafty.c("SpriteAnimation", {
 
 
 		if (data.currentSlideNumber === data.currentReel.length) {
-			data.currentSlideNumber = 0;
+			
 			if (this._frame.repeatInfinitly === true || this._frame.repeat > 0) {
 				if (this._frame.repeat) this._frame.repeat--;
 				this._frame.frameNumberBetweenSlides = 0;
 				this._frame.currentSlideNumber = 0;
 			} else {
-				this.trigger("AnimationEnd", { reel: data.currentReel });
-				this.stop();
-				return;
+				if (this._frame.frameNumberBetweenSlides === data.numberOfFramesBetweenSlides) {
+				    this.trigger("AnimationEnd", { reel: data.currentReel });
+				    this.stop();
+				    return;
+                }
 			}
+
 		}
 
 		this.trigger("Change");
@@ -6922,11 +6967,10 @@ Crafty.c("Image", {
 		this.__image = url;
 		this._repeat = repeat || "no-repeat";
 
-
-		this.img = Crafty.assets[url];
+		this.img = Crafty.asset(url);
 		if (!this.img) {
 			this.img = new Image();
-			Crafty.assets[url] = this.img;
+			Crafty.asset(url, this.img);
 			this.img.src = url;
 			var self = this;
 
@@ -7956,7 +8000,7 @@ Crafty.extend({
                         ext = path.substr(path.lastIndexOf('.') + 1).toLowerCase();
                         if(this.supported[ext]){
                             audio.src = path;
-                            if (!Crafty.assets[path]) Crafty.assets[path] = audio; 
+                            Crafty.asset(path, audio); 
                             this.sounds[i] = {
                                 obj:audio,
                                 played:0
@@ -7976,7 +8020,7 @@ Crafty.extend({
                     ext = url.substr(url.lastIndexOf('.') + 1).toLowerCase();
                     if(this.supported[ext]){
                         audio.src = url;
-                        if (!Crafty.assets[url]) Crafty.assets[url] = audio;  
+                        Crafty.asset(url, audio);  
                         this.sounds[id] = {
                             obj:audio,
                             played:0
@@ -7996,7 +8040,7 @@ Crafty.extend({
                         ext = path.substr(path.lastIndexOf('.') + 1).toLowerCase();	
                         if(this.supported[ext]){
                             audio.src = path;
-                            if (!Crafty.assets[path]) Crafty.assets[path] = audio;   
+                            Crafty.asset(path, audio);   
                             this.sounds[id] = {
                                 obj:audio,
                                 played:0
@@ -8042,13 +8086,13 @@ Crafty.extend({
             if(s.obj.currentTime) s.obj.currentTime = 0;   
             s.obj.play(); 
             s.played ++;
-            s.obj.onended = function(){
+            s.obj.addEventListener("ended", function(){
                 if(s.played < repeat || repeat == -1){
                     if(this.currentTime) this.currentTime = 0;
-                    this.play(); 
+                    this.play();
                     s.played ++;
                 }
-            };    
+            },true);    
         },
         /**@
         * #Crafty.audio.stop
@@ -8284,6 +8328,39 @@ Crafty.extend({
 	*/
 	assets: {},
 
+    /**@
+    * #Crafty.asset
+    * @category Assets
+    * 
+    * @trigger NewAsset - After setting new asset - Object - key and value of new added asset.
+    * @sign public void Crafty.asset(String key, Object asset)
+    * @param key - asset url.
+    * @param asset - Audio` or `Image` object.
+    * Add new asset to assets object.
+    * 
+    * @sign public void Crafty.asset(String key)
+    * @param key - asset url.
+    * Get asset from assets object.
+    * 
+    * @example
+    * ~~~
+    * Crafty.asset(key, value);
+    * var asset = Crafty.asset(key); //object with key and value fields
+    * ~~~
+    * 
+    * @see Crafty.assets
+    */
+    asset: function(key, value) {
+        if (arguments.length === 1) {
+            return Crafty.assets[key];
+        }
+
+        if (!Crafty.assets[key]) {
+            Crafty.assets[key] = value;
+            this.trigger("NewAsset", {key : key, value : value});
+        }
+    },
+
 	/**@
 	* #Crafty.loader
 	* @category Assets
@@ -8376,7 +8453,7 @@ Crafty.extend({
             current = data[i];
             ext = current.substr(current.lastIndexOf('.') + 1).toLowerCase();
            
-            obj = this.assets[current] || null;   
+            obj = Crafty.asset(current) || null;   
           
             if (Crafty.support.audio && Crafty.audio.supported[ext]) {   
                 //Create new object if not exists
@@ -8387,7 +8464,7 @@ Crafty.extend({
                     obj.src = current;
                     obj.preload = "auto";
                     obj.volume = Crafty.audio.volume;
-                    if (!Crafty.assets[current]) Crafty.assets[current] = obj; 
+                    Crafty.asset(current, obj);
                     Crafty.audio.sounds[name] = {
                         obj:obj,
                         played:0
@@ -8403,7 +8480,7 @@ Crafty.extend({
             } else if (ext === "jpg" || ext === "jpeg" || ext === "gif" || ext === "png") { 
                 if(!obj) {
                     obj = new Image();
-                    if (!Crafty.assets[current]) Crafty.assets[current] = obj;   
+                    Crafty.asset(current, obj);   
                 }
                 obj.onload=pro;
                 obj.src = current; //setup src after onload function Opera/IE Bug
