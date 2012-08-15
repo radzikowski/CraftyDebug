@@ -37,7 +37,7 @@
                                     '<div class="header">COMPONENTS<div class="separator"></div></div>'+
                                     '<div class="content" style="display:none">'+
                                         '<ul id="components-box-list"></ul>'+
-                                        '<input id="entities-search" type="text" placeholder="add component" class="search" /><img data-entity-id="" class="addComponent" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA01pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjlFRkFEQzc0QTM0MzExRTE5N0NBRjM2REEwOTczRjkzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjlFRkFEQzc1QTM0MzExRTE5N0NBRjM2REEwOTczRjkzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OUVGQURDNzJBMzQzMTFFMTk3Q0FGMzZEQTA5NzNGOTMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OUVGQURDNzNBMzQzMTFFMTk3Q0FGMzZEQTA5NzNGOTMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz617/6bAAAA3klEQVR42pySMQ6CQBBFh41HUA5gBZWFRg0HUdRwOgqjrYdAEi2sqLDUBPUCFugfM2s2BsLKTx7JZv+fHXbH8TyPDCkwBwswBT1wA3uwBhtQarNjhPtgC4ZUryOYgbM+SQeThiDJfiL+T1hJOy7ZyRW/4mAIRlWuLMvqCrA/5HBE7RSpulMtNODbflm2Sr7vm8tnB5876FYZuNBPwNSD2z60bPvE4bhlOOZ/5gLpnxfH3U6UzCq/dWEZLMRf6vHMQSCzSw2zHYj/O9u6wBgswQ5c+DnAVdYr2c914C3AANvWMQe07pynAAAAAElFTkSuQmCC" />'+
+                                        '<input id="components-search" type="text" placeholder="add component" class="search" /><img data-entity-id="" class="addComponent" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA01pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjlFRkFEQzc0QTM0MzExRTE5N0NBRjM2REEwOTczRjkzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjlFRkFEQzc1QTM0MzExRTE5N0NBRjM2REEwOTczRjkzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OUVGQURDNzJBMzQzMTFFMTk3Q0FGMzZEQTA5NzNGOTMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6OUVGQURDNzNBMzQzMTFFMTk3Q0FGMzZEQTA5NzNGOTMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz617/6bAAAA3klEQVR42pySMQ6CQBBFh41HUA5gBZWFRg0HUdRwOgqjrYdAEi2sqLDUBPUCFugfM2s2BsLKTx7JZv+fHXbH8TyPDCkwBwswBT1wA3uwBhtQarNjhPtgC4ZUryOYgbM+SQeThiDJfiL+T1hJOy7ZyRW/4mAIRlWuLMvqCrA/5HBE7RSpulMtNODbflm2Sr7vm8tnB5876FYZuNBPwNSD2z60bPvE4bhlOOZ/5gLpnxfH3U6UzCq/dWEZLMRf6vHMQSCzSw2zHYj/O9u6wBgswQ5c+DnAVdYr2c914C3AANvWMQe07pynAAAAAElFTkSuQmCC" />'+
                                     '</div>'+                                            
                                 '</div>'+
                                 '<div class="options">'+
@@ -169,7 +169,7 @@
         $('#crafty-debug #entities-box .options .content').html(template).show();
     };
 
-        /*********** Events ***********/
+    /*********** Events ***********/
 
     $('#entities-search').live('keyup',function(){
         $('#entities-box-list').html(Crafty.debugBar.renders.renderEntitesList(Crafty.debugBar.utils.listEntities($(this).val())));
@@ -180,6 +180,7 @@
             $('#entities-box').hide();
             $('#entities-box .options .content').hide();
         } else {
+            $('.panel-box').hide();
             $('#entities-box').show();
             $('#entities-box-list').html(Crafty.debugBar.renders.renderEntitesList(Crafty.debugBar.utils.listEntities('*')));
             $('#entities-box .options .content').show();
@@ -217,6 +218,31 @@
         
         Crafty(entity.data('ent')).attr(attr, Crafty.debugBar.utils.elementToTypedValue($(this)));
     });
+
+    Crafty.keyboardDispatch = function (e) {
+        e.key = e.keyCode || e.which;
+        if (e.type === "keydown") {
+            if (Crafty.keydown[e.key] !== true) {
+                Crafty.keydown[e.key] = true;
+                Crafty.trigger("KeyDown", e);
+            }
+        } else if (e.type === "keyup") {
+            delete Crafty.keydown[e.key];
+            Crafty.trigger("KeyUp", e);
+        }
+
+        //prevent default actions for all keys except backspace and F1-F12.
+        //Among others this prevent the arrow keys from scrolling the parent page
+        //of an iframe hosting the game
+        // if(Crafty.selected && !(e.key == 8 || e.key >= 112 && e.key <= 135)) {
+        //     if(e.stopPropagation) e.stopPropagation();
+        //     else e.cancelBubble = true;
+
+        //     if(e.preventDefault) e.preventDefault();
+        //     else e.returnValue = false;
+        //     return false;
+        // }
+    }
 
     /* Options mangement */
     $('#crafty-debug #entities-box .options .visible').live('click', function(){
